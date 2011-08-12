@@ -40,34 +40,46 @@ class SimpleImage {
  
          $this->image = imagecreatefrompng($filename);
       }
+		
+		if (!$this->image) {
+			throw new Exception("Invalid image type");
+		}
    }
    function save($filename, $image_type=IMAGETYPE_JPEG, $compression=75, $permissions=null) {
- 
+		$result = false;
+	
       if( $image_type == IMAGETYPE_JPEG ) {
-         imagejpeg($this->image,$filename,$compression);
+         $result = imagejpeg($this->image,$filename,$compression);
       } elseif( $image_type == IMAGETYPE_GIF ) {
  
-         imagegif($this->image,$filename);
+         $result = imagegif($this->image,$filename);
       } elseif( $image_type == IMAGETYPE_PNG ) {
  
-         imagepng($this->image,$filename);
+         $result = imagepng($this->image,$filename);
       }
       if( $permissions != null) {
  
          chmod($filename,$permissions);
       }
+		
+		if (!$result)
+			throw new Exception("Couldn't save image");
    }
    function output($image_type=IMAGETYPE_JPEG) {
+		$result = false;
  
       if( $image_type == IMAGETYPE_JPEG ) {
-         imagejpeg($this->image);
+         $result = imagejpeg($this->image);
       } elseif( $image_type == IMAGETYPE_GIF ) {
  
-         imagegif($this->image);
+         $result = imagegif($this->image);
       } elseif( $image_type == IMAGETYPE_PNG ) {
  
-         imagepng($this->image);
+         $result = imagepng($this->image);
       }
+		
+		if (!$result)
+			throw new Exception("Couldn't output image");
    }
    function getWidth() {
  
